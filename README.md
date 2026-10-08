@@ -1,5 +1,7 @@
 # Xythum website
 
+[![Deploy website](https://github.com/Xythum-Labs/XYTHUM-LABS.github.io/actions/workflows/pages.yml/badge.svg)](https://github.com/Xythum-Labs/XYTHUM-LABS.github.io/actions/workflows/pages.yml)
+
 The official website source for Xythum Labs: private cross-chain execution infrastructure for protected intent, distributed coordination, and verifiable settlement.
 
 ## Project structure
