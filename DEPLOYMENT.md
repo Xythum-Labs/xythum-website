@@ -35,7 +35,7 @@ The included workflow publishes `dist/` from `main`.
    | --- | --- | --- |
    | CNAME | `www` | `xythum-labs.github.io` |
 
-6. Keep the existing Hostinger nameservers, Zoho MX records, SPF/DKIM/DMARC records, and verification TXT records.
+6. Keep the existing Hostinger nameservers, Zoho MX records, SPF/DKIM/DMARC records, and verification TXT records. GitHub uses the organization-level `xythum-labs.github.io` DNS target regardless of the repository's professional display name.
 7. Wait for GitHub's domain check, then enable **Enforce HTTPS**.
 8. Verify:
 

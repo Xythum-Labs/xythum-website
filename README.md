@@ -1,6 +1,6 @@
 # Xythum website
 
-[![Deploy website](https://github.com/Xythum-Labs/XYTHUM-LABS.github.io/actions/workflows/pages.yml/badge.svg)](https://github.com/Xythum-Labs/XYTHUM-LABS.github.io/actions/workflows/pages.yml)
+[![Deploy website](https://github.com/Xythum-Labs/xythum-website/actions/workflows/pages.yml/badge.svg)](https://github.com/Xythum-Labs/xythum-website/actions/workflows/pages.yml)
 
 The official website source for Xythum Labs: private cross-chain execution infrastructure for protected intent, distributed coordination, and verifiable settlement.
 
@@ -38,7 +38,7 @@ python generate_seo.py
 
 ## Deployment
 
-Every push to `main` runs syntax, route-count, and sitemap validation before deploying the static `dist/` directory. The repository name `XYTHUM-LABS.github.io` gives the organization a root GitHub Pages origin without a repository path prefix.
+Every push to `main` runs syntax, route-count, and sitemap validation before deploying the static `dist/` directory. Production metadata is generated for `https://xythum.io`, keeping the repository independent from any temporary hosting URL.
 
 Read [DEPLOYMENT.md](DEPLOYMENT.md) before changing DNS. The current domain uses Hostinger nameservers and Zoho Mail records, so an unplanned nameserver change could interrupt email.
 
