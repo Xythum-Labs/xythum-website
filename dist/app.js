@@ -1,5 +1,19 @@
 const $ = (s, root=document) => root.querySelector(s);
 const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+const BASE_PATH = (document.documentElement.dataset.basePath || '').replace(/\/$/, '');
+const currentPath = () => {
+  let path = location.pathname.replace(/\/$/, '') || '/';
+  if (BASE_PATH && (path === BASE_PATH || path.startsWith(BASE_PATH + '/'))) path = path.slice(BASE_PATH.length) || '/';
+  return path;
+};
+const applyBasePath = (root=document) => {
+  if (!BASE_PATH) return;
+  $$('a[href^="/"],img[src^="/"]', root).forEach(el => {
+    const attr = el.hasAttribute('href') ? 'href' : 'src';
+    const value = el.getAttribute(attr);
+    if (!value.startsWith(BASE_PATH + '/') && value !== BASE_PATH) el.setAttribute(attr, BASE_PATH + value);
+  });
+};
 const state = { motion: !matchMedia('(prefers-reduced-motion: reduce)').matches, demoStep: 0, timer: null, filter: 'all' };
 const mark = (className='brand-mark') => `<img class="${className}" src="/assets/xythum-official.jpeg" alt="" width="56" height="56">`;
 
@@ -83,8 +97,8 @@ function community(){const direct=[['X / Twitter','@Xythum','Social updates and 
 function draftPage(kind){const copy={privacy:['Privacy policy draft','Operator, hosting provider, log retention, and applicable rights must be confirmed before this document is final.'],terms:['Terms draft','Operator, jurisdiction, intellectual-property rights, and applicable limitations must be confirmed before this document is final.'],'responsible-disclosure':['Responsible disclosure draft','A monitored reporting channel, scope, handling process, and any safe-harbor language must be confirmed before publication.']}[kind];return contentPage(pageHero('DRAFT / NOT FINAL',copy[0],copy[1],['REQUIRES OWNER REVIEW']),[{id:'status',title:'Why this remains a draft',html:'<p>The website currently uses no analytics, newsletter, account, wallet connection, or form. Hosting infrastructure may still create network logs. The final policy must match the actual operator and deployment.</p>'},{id:'next',title:'Required before publication',html:'<ul><li>Website operator and contact</li><li>Hosting and service-provider facts</li><li>Retention and request-handling process</li><li>Jurisdiction-specific review where applicable</li></ul>'}])}
 function notFound(){return shell(`${pageHero('404','This route is outside the graph.','The requested page does not exist in this research presentation.')}<section class="section"><div class="container"><a class="btn" href="/">Return to Xythum</a></div></section>`)}
 
-function route(){const path=location.pathname.replace(/\/$/,'')||'/';if(path==='/')return home();if(path==='/protocol')return protocolIndex();if(path.startsWith('/protocol/'))return topicPage(path.split('/').pop());if(path==='/privacy-model')return privacy();if(path==='/threat-model')return threat();if(path==='/research')return researchPage();if(path==='/developers')return developers();if(path==='/security')return security();if(path==='/history')return history();if(path==='/disclosures')return disclosures();if(path==='/contact')return contact();if(path==='/community')return community();if(path==='/privacy')return draftPage('privacy');if(path==='/terms')return draftPage('terms');if(path==='/responsible-disclosure')return draftPage('responsible-disclosure');return notFound()}
-function setTitle(){const p=location.pathname;const t=p==='/'?'Xythum — The Private Liquidity Layer':p.split('/').filter(Boolean).map(x=>x.replace(/-/g,' ')).map(x=>x.replace(/\b\w/g,c=>c.toUpperCase())).join(' — ')+' — Xythum';if(!document.querySelector('link[rel="canonical"]'))document.title=t;if(['/privacy','/terms','/responsible-disclosure'].includes(p)&&!document.querySelector('meta[name="robots"]')){const meta=document.createElement('meta');meta.name='robots';meta.content='noindex,nofollow';document.head.appendChild(meta)}}
+function route(){const path=currentPath();if(path==='/')return home();if(path==='/protocol')return protocolIndex();if(path.startsWith('/protocol/'))return topicPage(path.split('/').pop());if(path==='/privacy-model')return privacy();if(path==='/threat-model')return threat();if(path==='/research')return researchPage();if(path==='/developers')return developers();if(path==='/security')return security();if(path==='/history')return history();if(path==='/disclosures')return disclosures();if(path==='/contact')return contact();if(path==='/community')return community();if(path==='/privacy')return draftPage('privacy');if(path==='/terms')return draftPage('terms');if(path==='/responsible-disclosure')return draftPage('responsible-disclosure');return notFound()}
+function setTitle(){const p=currentPath();const t=p==='/'?'Xythum — The Private Liquidity Layer':p.split('/').filter(Boolean).map(x=>x.replace(/-/g,' ')).map(x=>x.replace(/\b\w/g,c=>c.toUpperCase())).join(' — ')+' — Xythum';if(!document.querySelector('link[rel="canonical"]'))document.title=t;if(['/privacy','/terms','/responsible-disclosure'].includes(p)&&!document.querySelector('meta[name="robots"]')){const meta=document.createElement('meta');meta.name='robots';meta.content='noindex,nofollow';document.head.appendChild(meta)}}
 function updateDemo(){$$('.route-step').forEach(el=>{const i=+el.dataset.step;el.classList.toggle('done',i<state.demoStep);el.classList.toggle('live',i===state.demoStep&&state.demoStep<4)});const live=$('.disclosure[aria-live]');if(live)live.textContent=state.demoStep>=4?'Comparison complete. No transaction was created.':`Concept step ${state.demoStep+1} of 4. No funds move.`}
 function stopDemo(){clearInterval(state.timer);state.timer=null;const b=$('.pause-demo');if(b)b.textContent='Pause'}
 function advance(){state.demoStep=Math.min(4,state.demoStep+1);updateDemo();if(state.demoStep>=4)stopDemo()}
@@ -93,4 +107,4 @@ function bind(){const m=$('.menu');if(m)m.onclick=()=>{const p=$('#mobile-menu')
   const progress=$('.scroll-progress');const updateProgress=()=>{if(progress){const max=document.documentElement.scrollHeight-innerHeight;progress.style.transform=`scaleX(${max>0?scrollY/max:0})`}};addEventListener('scroll',updateProgress,{passive:true});updateProgress();
   const aura=$('.cursor-aura');if(aura&&matchMedia('(pointer:fine)').matches){addEventListener('pointermove',e=>{aura.style.setProperty('--x',e.clientX+'px');aura.style.setProperty('--y',e.clientY+'px')},{passive:true})}
   document.body.classList.toggle('paused',!state.motion);updateDemo()}
-$('#app').innerHTML=route();setTitle();bind();
+$('#app').innerHTML=route();applyBasePath($('#app'));setTitle();bind();

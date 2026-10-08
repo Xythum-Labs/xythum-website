@@ -7,6 +7,7 @@ ROOT = Path(__file__).parent
 DIST = ROOT / "dist"
 ORIGIN = os.environ.get("SITE_URL", "https://xythum.io").rstrip("/")
 ASSET_VERSION = os.environ.get("ASSET_VERSION", "local")
+BASE_PATH = os.environ.get("BASE_PATH", "").rstrip("/")
 IMAGE = f"{ORIGIN}/assets/xythum-official.jpeg"
 
 routes = {
@@ -61,7 +62,7 @@ def document(route, title, description):
             "about": {"@type": "Organization", "name": "Xythum Labs"},
         }
     return f'''<!doctype html>
-<html lang="en">
+<html lang="en" data-base-path="{BASE_PATH}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -73,9 +74,9 @@ def document(route, title, description):
   <meta name="author" content="Xythum Labs">
   <link rel="canonical" href="{canonical}">
   <link rel="alternate" hreflang="en" href="{canonical}">
-  <link rel="icon" href="/assets/xythum-official.jpeg" type="image/jpeg">
-  <link rel="apple-touch-icon" href="/assets/xythum-official.jpeg">
-  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" href="{BASE_PATH}/assets/xythum-official.jpeg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="{BASE_PATH}/assets/xythum-official.jpeg">
+  <link rel="manifest" href="{BASE_PATH}/site.webmanifest">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Xythum">
   <meta property="og:title" content="{escape(title, quote=True)}">
@@ -88,14 +89,14 @@ def document(route, title, description):
   <meta name="twitter:description" content="{escape(description, quote=True)}">
   <meta name="twitter:image" content="{IMAGE}">
   <script type="application/ld+json">{json.dumps(schema, separators=(',', ':'))}</script>
-  <link rel="stylesheet" href="/styles.css?v={ASSET_VERSION}">
+  <link rel="stylesheet" href="{BASE_PATH}/styles.css?v={ASSET_VERSION}">
   <title>{escape(title)}</title>
 </head>
 <body>
   <a class="skip" href="#content">Skip to content</a>
-  <div id="app"><main id="content" class="static-fallback"><article><p>XYTHUM LABS</p><h1>{escape(title)}</h1><p>{escape(description)}</p><nav aria-label="Core destinations"><a href="/protocol/">Protocol</a><a href="/research/">Research</a><a href="/developers/">Developers</a><a href="/community/">Community</a></nav></article></main></div>
+  <div id="app"><main id="content" class="static-fallback"><article><p>XYTHUM LABS</p><h1>{escape(title)}</h1><p>{escape(description)}</p><nav aria-label="Core destinations"><a href="{BASE_PATH}/protocol/">Protocol</a><a href="{BASE_PATH}/research/">Research</a><a href="{BASE_PATH}/developers/">Developers</a><a href="{BASE_PATH}/community/">Community</a></nav></article></main></div>
   <noscript><p class="noscript">This site includes an interactive protocol visualization. All core pages and public source links remain available through the navigation above.</p></noscript>
-  <script src="/app.js?v={ASSET_VERSION}" defer></script>
+  <script src="{BASE_PATH}/app.js?v={ASSET_VERSION}" defer></script>
 </body>
 </html>
 '''

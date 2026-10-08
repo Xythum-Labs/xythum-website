@@ -25,6 +25,7 @@ jobs:
         env:
           SITE_URL: https://xythum.io
           ASSET_VERSION: ${{ github.sha }}
+          BASE_PATH: /xythum-website
         run: python generate_seo.py
 
       - name: Validate site
