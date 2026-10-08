@@ -36,7 +36,7 @@ $env:ASSET_VERSION='preview'
 python generate_seo.py
 ```
 
-`BASE_PATH` is supported for project-hosted previews such as GitHub Pages. The deployment workflow currently uses `/xythum-website`; set it to an empty value when `xythum.io` becomes the attached GitHub Pages custom domain.
+`BASE_PATH` is supported for project-hosted previews. The production workflow leaves it empty because `xythum.io` is registered as the GitHub Pages custom domain and serves the website from `/`.
 
 ## Deployment
 

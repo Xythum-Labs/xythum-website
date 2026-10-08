@@ -18,7 +18,7 @@ Preserve every MX and TXT record during a website migration. Website hosting and
 The included workflow publishes `dist/` from `main`.
 
 1. In GitHub, open **Settings → Pages** and keep **Source: GitHub Actions**.
-2. Add `xythum.io` under **Custom domain** before changing DNS.
+2. `xythum.io` is already registered under **Custom domain**. Keep it there while DNS propagates.
 3. In the current DNS provider, remove only the two existing apex website A records after confirming the new Pages deployment works.
 4. Add these apex records:
 
