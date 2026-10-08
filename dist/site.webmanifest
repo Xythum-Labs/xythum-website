@@ -1,0 +1,16 @@
+{
+  "name": "Xythum \u2014 The Private Liquidity Layer",
+  "short_name": "Xythum",
+  "description": "Xythum is building a private liquidity layer for cross-chain execution, combining protected intent, distributed coordination, and verifiable settlement.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080b0c",
+  "theme_color": "#080b0c",
+  "icons": [
+    {
+      "src": "/assets/xythum-official.jpeg",
+      "sizes": "any",
+      "type": "image/jpeg"
+    }
+  ]
+}

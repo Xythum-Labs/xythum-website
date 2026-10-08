@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /privacy/
+Disallow: /terms/
+Disallow: /responsible-disclosure/
+Sitemap: https://xythum.io/sitemap.xml

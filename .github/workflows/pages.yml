@@ -1,0 +1,59 @@
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Generate production metadata
+        env:
+          SITE_URL: https://xythum.io
+          ASSET_VERSION: ${{ github.sha }}
+        run: python generate_seo.py
+
+      - name: Validate site
+        run: |
+          node --check dist/app.js
+          python - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          ET.parse("dist/sitemap.xml")
+          pages = list(Path("dist").rglob("index.html"))
+          assert len(pages) == 23, f"expected 23 route pages, found {len(pages)}"
+          print(f"validated {len(pages)} route pages")
+          PY
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
